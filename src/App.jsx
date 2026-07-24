@@ -11,7 +11,7 @@ export default function App() {
         <h2><b>{theme ? "Please Login" : "Welcome Back!"}</b></h2>
         <h3>Current Theme :{theme ? " Dark Theme" : " Light Theme"} </h3>
         <button onClick={() => settheme(!theme)}>
-          {theme ? "Switch to Light Mode" : "Switch to Dark Mode"}</button>
+          {theme ? "Light Mode" : "Dark Mode"}</button>
       </div>
     </div>
   );
