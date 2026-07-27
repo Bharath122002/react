@@ -1,21 +1,276 @@
-import React from "react";
 import { useState } from "react";
 import "./App.css";
 
-export default function App() {
-  const [theme, settheme] = useState(false);
+function App() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+    dob: "",
+    gender: "",
+    address: "",
+    city: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const validate = () => {
+    let newErrors = {};
+
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First Name is required";
+
+    if (!formData.lastName.trim())
+      newErrors.lastName = "Last Name is required";
+
+    if (!formData.email)
+      newErrors.email = "Email is required";
+    else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    )
+      newErrors.email = "Invalid Email Address";
+
+    if (!formData.mobile)
+      newErrors.mobile = "Mobile Number is required";
+    else if (!/^[0-9]{10}$/.test(formData.mobile))
+      newErrors.mobile = "Enter a valid 10-digit mobile number";
+
+    if (!formData.password)
+      newErrors.password = "Password is required";
+    else if (formData.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+
+    if (!formData.confirmPassword)
+      newErrors.confirmPassword = "Confirm Password is required";
+    else if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+
+    if (!formData.dob)
+      newErrors.dob = "Date of Birth is required";
+
+    if (!formData.gender)
+      newErrors.gender = "Please select Gender";
+
+    if (!formData.address.trim())
+      newErrors.address = "Address is required";
+
+    if (!formData.city.trim())
+      newErrors.city = "City is required";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validate()) {
+      alert("Registration Successful!");
+
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        mobile: "",
+        password: "",
+        confirmPassword: "",
+        dob: "",
+        gender: "",
+        address: "",
+        city: "",
+      });
+
+      setErrors({});
+    }
+  };
+
   return (
-    <div className={theme ? "dark" : "light"}>
-      <div className="container">
-        <h1>React Theme Toggle</h1>
-        <h2><b>{theme ? "Please Login" : "Welcome Back!"}</b></h2>
-        <h3>Current Theme :{theme ? " Dark Theme" : " Light Theme"} </h3>
-        <button onClick={() => settheme(!theme)}>
-          {theme ? "Light Mode" : "Dark Mode"}</button>
-      </div>
+    <div className="container">
+      <form className="form" onSubmit={handleSubmit}>
+        <h1>Registration Form</h1>
+        <p className="subtitle">
+          Create your account by filling in the details below
+        </p>
+
+        <div className="form-grid">
+          <div className="form-group">
+            <label>First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="Enter First Name"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.firstName}</span>
+          </div>
+
+          <div className="form-group">
+            <label>Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Enter Last Name"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.lastName}</span>
+          </div>
+
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.email}</span>
+          </div>
+
+          <div className="form-group">
+            <label>Mobile Number</label>
+            <input
+              type="text"
+              name="mobile"
+              placeholder="Enter Mobile Number"
+              value={formData.mobile}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.mobile}</span>
+          </div>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.password}</span>
+          </div>
+
+          <div className="form-group">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.confirmPassword}</span>
+          </div>
+
+          <div className="form-group">
+            <label>Date of Birth</label>
+            <input
+              type="date"
+              name="dob"
+              value={formData.dob}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.dob}</span>
+          </div>
+
+          <div className="form-group">
+            <label>City</label>
+            <input
+              type="text"
+              name="city"
+              placeholder="Enter City"
+              value={formData.city}
+              onChange={handleChange}
+            />
+            <span className="error">{errors.city}</span>
+          </div>
+
+          <div className="form-group full">
+            <label>Gender</label>
+
+            <div className="gender">
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  checked={formData.gender === "Male"}
+                  onChange={handleChange}
+                />
+                Male
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  checked={formData.gender === "Female"}
+                  onChange={handleChange}
+                />
+                Female
+              </label>
+            </div>
+
+            <span className="error">{errors.gender}</span>
+          </div>
+
+          <div className="form-group full">
+            <label>Address</label>
+            <textarea
+              name="address"
+              placeholder="Enter Address"
+              value={formData.address}
+              onChange={handleChange}
+            ></textarea>
+            <span className="error">{errors.address}</span>
+          </div>
+
+          <div className="form-group full">
+            <button type="submit">Create Account</button>
+          </div>
+        </div>
+      </form>
     </div>
   );
 }
+
+export default App;
+
+// import React from "react";
+// import { useState } from "react";
+// import "./App.css";
+
+// export default function App() {
+//   const [theme, settheme] = useState(false);
+//   return (
+//     <div className={theme ? "dark" : "light"}>
+//       <div className="container">
+//         <h1>React Theme Toggle</h1>
+//         <h2><b>{theme ? "Please Login" : "Welcome Back!"}</b></h2>
+//         <h3>Current Theme :{theme ? " Dark Theme" : " Light Theme"} </h3>
+//         <button onClick={() => settheme(!theme)}>
+//           {theme ? "Light Mode" : "Dark Mode"}</button>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 // import React from 'react'
